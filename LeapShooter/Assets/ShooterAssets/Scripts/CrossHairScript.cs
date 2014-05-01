@@ -5,7 +5,7 @@ using Leap;
 public class CrossHairScript : MonoBehaviour {
 	public float chDist = 10;
 
-	//shooterObject shoot = new shooterObject();
+	// Declare variables here
 	Controller controller;
 	private Camera mainCam;
 	private LeapManager leapManager;
