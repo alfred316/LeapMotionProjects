@@ -196,6 +196,73 @@ targetHealth -=1;
 
 }
 
-	We name the colliding target “bullet(Clone)” instead of just “bullet” because that’s what they’re called in the hierarchy if they are instantiated from the same prefab. Because clones of it are created. 
+	We name the colliding target “bullet(Clone)” instead of just “bullet” because that’s what they’re called in the hierarchy if they are instantiated from the same prefab, because clones of it are created. 
+
+	One last cool trick we will look at is making some of the targets move left and right, or even up and down if you prefer that instead. This will add some challenge to the game and make it seem like an actual shooting range. For this, we will look at my script named targetMove.js. Again, this is in JavaScript, but you can write it in C# or Boo, according to your preference. We declare a few variables first to hold information on the x position of the target, it’s y position, and the maximum position we want to set for movement. 
+
+	private var Xpos : float;
+private var Ypos : float;
+private var max : boolean;
+
+After that, w have three more variables, but these are public variables, meaning we can see them and change them from the Unity interface instead of just the code. The first one is a Boolean variable named Vert, when that is true, the code will make the target move vertically, otherwise if it’s false, the code will make it move horizontally. The next two are maxAmount and step, which are useful to be changeable from the interface so as to test how far you wanna set the maximum amount and how fast you want it to step between extremes. The declarations look like so:
+
+var Vert : boolean;
+var maxAmount : int;
+var step : float;
+
+Our Update function is changed to a FixedUpdate because that handles this code better after testing. There are two pieces of control flow that will handle setting the max range of the target’s movement and one that will move the target. 
+
+//set the max
+	if (Vert) 
+	{
+		if (transform.position.y >= Ypos + maxAmount)
+		{
+		max = true;
+		}
+		else if (transform.position.y <= Ypos)
+		{
+		max = false;
+		}
+	}
+	
+	else 
+	{
+	
+	if (transform.position.x >= Xpos + maxAmount)
+		{
+		max = true;
+		}
+		else if (transform.position.x <= Xpos)
+		{
+		max = false;
+		}
+	
+	}
+
+This is very simple code, it first checks to see if we are moving vertically or horizontally, and according to that, it changes the Y and X transforms respectively. After checking for the Boolean condition, it checks to see if the current position of the target and if it is at the maximum position, and if it is, then the Boolean max is set to true,  and if it is not at the maximum, then it is set to false. This Boolean variable will be used in the next piece of code that actually moves the target:
+
+//moving the platform
+	if (Vert){
+		if(!max){
+			transform.position.y +=step;
+		}
+		else 
+		{
+			transform.position.y -=step;
+		}
+		}
+	else //horizontal movement 
+	{
+	if(!max){
+			transform.position.x +=step;
+		}
+		else 
+		{
+			transform.position.x -=step;
+		}
+		
+	}
+
+This is also another simple piece of code. Like the other chunk of code we just looked at, it checks for the Vert Boolean, to see if it’s going to be changing the X or Y transform. After that, the max Boolean that we manipulated earlier will be used here, and if it is true, then you move in the opposite direction of where you are so that you can reach the other extreme. If it is false, then you keep moving in the positive direction. This is all that there is to it. Your targets now move based on your specifications. Play around with the maxAmount, Vert, and step variables and see what works best for you!
 
 	And there you have it. You have no created a fully functional and fun Leap Motion Unity3D game. You learned how to integrate Leap using a prebuilt Leap Manager class, or just by simply using the libs and creating your own instances of the classes and making the objects work together to get your data. You learned how to make sure that the crosshair moves with your finger, and that it shoots when you do a screen tap motion and reloads when you swipe. You also learned how to set up targets and shoot them down. Enjoy the game! Hope this was educational, happy shooting! 
